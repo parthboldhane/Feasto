@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feedback — Feasto</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  </head>
+  <body class="page">
+    <header class="admin-header" role="banner">
+      <a href="dashboard.html" class="admin-header__brand">
+        <img src="../assets/images/logo.png" alt="" class="admin-header__logo" />
+        <span class="admin-header__name">Feasto</span>
+        <span class="admin-header__badge">User</span>
+      </a>
+
+      <nav class="navbar__links" aria-label="User">
+        <a href="dashboard.html">Home</a>
+        <a href="orders.html">Orders</a>
+        <a href="coins.html">Coins</a>
+        <a href="feedback.html" class="is-active">Feedback</a>
+        <a href="#" id="nav-logout" data-action="logout">Logout</a>
+      </nav>
+    </header>
+    <main class="page__main">
+      <h1 class="page__title">Feedback</h1>
+      <div class="card" style="max-width: 32rem">
+        <h2 class="card__title">How was your experience?</h2>
+        <div id="feedback-message" role="status"></div>
+        <form id="feedback-form">
+          <input type="hidden" name="rating" id="rating-value" value="" />
+          <div class="field">
+            <span id="rating-label">Rating</span>
+            <div class="star-rating" id="star-rating" role="group" aria-labelledby="rating-label"></div>
+          </div>
+          <div class="field">
+            <label for="comment">Comment (optional)</label>
+            <textarea class="textarea" id="comment" name="comment" rows="4"></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary">Submit feedback</button>
+        </form>
+      </div>
+    </main>
+    <script type="module">
+      import { protectRoute } from "../assets/js/route_guard.js";
+      import { initFeedbackPage } from "../assets/js/feedback.js";
+
+      if (!protectRoute({ expectedRole: "user" })) {
+        throw new Error("Redirecting");
+      }
+      document.getElementById("nav-logout")?.addEventListener("click", (event) => {
+        event.preventDefault();
+        localStorage.clear();
+        window.location.href = "/index.html";
+      });
+      initFeedbackPage();
+    </script>
+  </body>
+</html>

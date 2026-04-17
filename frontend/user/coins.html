@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coins — Feasto</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  </head>
+  <body class="page">
+    <header class="admin-header" role="banner">
+      <a href="dashboard.html" class="admin-header__brand">
+        <img src="../assets/images/logo.png" alt="" class="admin-header__logo" />
+        <span class="admin-header__name">Feasto</span>
+        <span class="admin-header__badge">User</span>
+      </a>
+
+      <nav class="navbar__links" aria-label="User">
+        <a href="dashboard.html">Home</a>
+        <a href="orders.html">Orders</a>
+        <a href="coins.html" class="is-active">Coins</a>
+        <a href="feedback.html">Feedback</a>
+        <a href="#" id="nav-logout" data-action="logout">Logout</a>
+      </nav>
+    </header>
+    <main class="page__main">
+      <h1 class="page__title">Coins</h1>
+      <div id="rewards-message" role="status"></div>
+      <div id="rewards-root">
+        <div class="card">
+          <h2 class="card__title">Feasto Coins</h2>
+          <p class="coins-display">0 <span style="font-size:1rem;color:var(--text-secondary);font-weight:500;">coins</span></p>
+          <p style="margin:0;color:var(--text-secondary);">Earn 5 coins for every Rs1 spent</p>
+        </div>
+      </div>
+    </main>
+    <script type="module">
+      import { protectRoute } from "../assets/js/route_guard.js";
+      import { initRewardsDemoPage } from "../assets/js/feasto_demo.js";
+
+      if (!protectRoute({ expectedRole: "user" })) {
+        throw new Error("Redirecting");
+      }
+      document.getElementById("nav-logout")?.addEventListener("click", (event) => {
+        event.preventDefault();
+        localStorage.clear();
+        window.location.href = "/index.html";
+      });
+      initRewardsDemoPage();
+    </script>
+  </body>
+</html>
+

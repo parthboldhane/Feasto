@@ -1,0 +1,130 @@
+smart-canteen/
+│
+├── backend/
+│   │
+│   ├── app/
+│   │   │
+│   │   ├── main.py                  # FastAPI entry point
+│   │   ├── config.py                # Settings (DB URL, secrets)
+│   │   │
+│   │   ├── routes/                  # All API routes
+│   │   │   ├── auth.py              # Login / Register
+│   │   │   ├── crowd.py             # Crowd API (/api/crowd)
+│   │   │   ├── orders.py            # Pre-order system
+│   │   │   ├── admin.py             # Admin controls
+│   │   │   ├── feedback.py          # Feedback & ratings
+│   │   │   ├── rewards.py           # Feasto coins system
+│   │   │   ├── payment.py           # Dummy UPI / COD
+│   │   │
+│   │   ├── services/                # Core logic (brains)
+│   │   │   ├── crowd_service.py     # 🔥 K logic (MOST IMPORTANT)
+│   │   │   ├── prediction.py        # Forecast logic
+│   │   │   ├── order_service.py     # Order handling logic
+│   │   │   ├── reward_service.py    # Coin calculation
+│   │   │   ├── payment_service.py   # Dummy payment logic
+│   │   │
+│   │   ├── models/                  # DB models (Mongo)
+│   │   │   ├── user_model.py
+│   │   │   ├── order_model.py
+│   │   │   ├── feedback_model.py
+│   │   │   ├── crowd_model.py       # Optional (store history)
+│   │   │   ├── reward_model.py
+│   │   │
+│   │   ├── database/
+│   │   │   ├── db.py                # MongoDB connection
+│   │   │
+│   │   ├── utils/
+│   │   │   ├── auth_utils.py        # JWT, hashing
+│   │   │   ├── helpers.py           # Common helpers
+│   │
+│   ├── requirements.txt
+│
+├── frontend/
+│   │
+│   ├── user/
+│   │   ├── index.html
+│   │   ├── dashboard.html          # Crowd + best time
+│   │   ├── order.html              # Pre-order UI
+│   │   ├── rewards.html            # Feasto coins
+│   │   ├── feedback.html
+│   │
+│   ├── admin/
+│   │   ├── index.html
+│   │   ├── dashboard.html          # Orders + crowd control
+│   │   ├── orders.html             # Accept / reject
+│   │   ├── feedback.html
+│   │
+│   ├── assets/
+│   │   ├── css/
+│   │   ├── js/
+│   │
+│   ├── api/                        # API call handlers
+│   │   ├── crowd.js
+│   │   ├── orders.js
+│   │   ├── auth.js
+│   │
+│   ├── package.json (if using React/Vite)
+│
+└── README.md
+
+------------------------------------------------------------------------------------------------------------------------------------------
+"✅ Explanation / Purpose of Each File"
+| Feature       | API                  |
+| ------------- | -------------------- |
+| Crowd meter   | `/api/crowd`         |
+| Best time     | `/api/crowd`         |
+| Prediction    | `/api/crowd/predict` |
+| Admin control | `/api/admin/crowd`   |
+| Pre-order     | `/api/orders`        |
+| Accept/Reject | `/api/orders/{id}`   |
+| Payment       | `/api/payment`       |
+| Coins         | `/api/rewards`       |
+| Feedback      | `/api/feedback`      |
+| Login         | `/api/auth/login`    |                                         |
+------------------------------------------------------------------------------------------------------------------------------------------
+"FrontEnd"
+frontend/
+│
+├── user/
+│   ├── index.html              # Login / Landing
+│   ├── dashboard.html          # Crowd + Best Time 🔥
+│   ├── order.html              # Pre-order food
+│   ├── rewards.html            # Feasto coins
+│   ├── feedback.html           # Give feedback
+│
+├── admin/
+│   ├── index.html              # Admin login
+│   ├── dashboard.html          # Overview (crowd + stats)
+│   ├── orders.html             # Accept / Reject orders
+│   ├── crowd.html              # Manual crowd input
+│   ├── feedback.html           # View feedback
+│
+├── assets/
+│   ├── css/
+│   │   ├── styles.css
+│   │   ├── dashboard.css
+│   │
+│   ├── js/
+│   │   ├── main.js
+│   │   ├── crowd.js            # Calls /api/crowd
+│   │   ├── orders.js
+│   │   ├── auth.js
+│   │   ├── rewards.js
+│   │   ├── payment.js
+│   │
+│   ├── images/
+│
+├── components/                 # Optional reusable UI
+│   ├── navbar.html
+│   ├── footer.html
+│   ├── crowd_meter.html
+│
+├── api/                        # API call wrappers
+│   ├── crowd_api.js
+│   ├── order_api.js
+│   ├── auth_api.js
+│
+└── README.md
+------------------------------------------------------------------------------------------------------------------------------------------
+
+

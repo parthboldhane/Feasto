@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscription — Feasto Admin</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  </head>
+  <body class="page">
+    <header class="admin-header" role="banner">
+      <a href="dashboard.html" class="admin-header__brand">
+        <img src="../assets/images/logo.png" alt="" class="admin-header__logo" />
+        <span class="admin-header__name">Feasto</span>
+        <span class="admin-header__badge">Admin</span>
+      </a>
+      <nav class="navbar__links" aria-label="Admin">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="orders.html">Orders</a>
+        <a href="history.html">History</a>
+        <a href="crowd.html">Crowd</a>
+        <a href="feedback.html">Feedback</a>
+        <a href="subscription.html" class="is-active">Subscription</a>
+        <a href="#" id="nav-logout" data-action="logout">Logout</a>
+      </nav>
+    </header>
+    <main class="page__main">
+      <h1 class="page__title">Admin subscription</h1>
+      <p class="subscription-page__intro">Manage your Feasto admin plan. Billing is simulated locally until backend checkout is connected.</p>
+
+      <div id="subscription-status-card" class="card subscription-status-card"></div>
+
+      <div class="subscription-plans">
+        <article class="card subscription-plan-card">
+          <h2 class="card__title">Monthly</h2>
+          <p class="subscription-plan-card__price"><span class="subscription-plan-card__currency">₹</span>499</p>
+          <p class="subscription-plan-card__period">per month</p>
+          <ul class="subscription-plan-card__list">
+            <li>Full admin dashboard access</li>
+            <li>Renew or cancel anytime</li>
+          </ul>
+          <button type="button" class="btn btn--primary subscription-pay-btn" data-plan="monthly">Pay now</button>
+          <p class="subscription-plan-card__hint" data-plan-hint="monthly" hidden></p>
+        </article>
+        <article class="card subscription-plan-card subscription-plan-card--featured">
+          <span class="subscription-plan-card__badge">Best value</span>
+          <h2 class="card__title">Yearly</h2>
+          <p class="subscription-plan-card__price"><span class="subscription-plan-card__currency">₹</span>4999</p>
+          <p class="subscription-plan-card__period">per year</p>
+          <ul class="subscription-plan-card__list">
+            <li>Everything in Monthly</li>
+            <li>Save vs paying monthly</li>
+          </ul>
+          <button type="button" class="btn btn--primary subscription-pay-btn" data-plan="yearly">Pay now</button>
+          <p class="subscription-plan-card__hint" data-plan-hint="yearly" hidden></p>
+        </article>
+      </div>
+
+      <div id="subscription-toast" class="subscription-toast hidden" role="status" aria-live="polite"></div>
+    </main>
+    <script type="module">
+      import { protectRoute } from "../assets/js/route_guard.js";
+      import { attachLogoutHandler } from "../assets/js/auth.js";
+      import { getSubscriptionState, setSubscriptionAfterPayment } from "../assets/js/feasto_subscription_state.js";
+      import { updateSubscription } from "../assets/js/api.js";
+
+      if (!protectRoute({ expectedRole: "admin" })) {
+        throw new Error("Redirecting");
+      }
+      attachLogoutHandler("admin");
+
+      const statusEl = document.getElementById("subscription-status-card");
+      const toast = document.getElementById("subscription-toast");
+
+      function renderStatus() {
+        const s = getSubscriptionState();
+        const label = s.isActive ? "Active" : "Expired";
+        const pillClass = s.isActive ? "subscription-pill--active" : "subscription-pill--expired";
+        const expLabel = s.expiryDate
+          ? new Date(s.expiryDate).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })
+          : "—";
+        const plan = s.planType ? s.planType.charAt(0).toUpperCase() + s.planType.slice(1) : "—";
+        statusEl.innerHTML = `
+          <div class="subscription-status-card__row">
+            <div>
+              <h2 class="card__title">Current status</h2>
+              <p class="subscription-status-card__plan">Plan: <strong>${plan}</strong></p>
+              <p class="subscription-status-card__expiry">Renews / expires: <strong>${expLabel}</strong></p>
+            </div>
+            <span class="subscription-pill ${pillClass}">${label}</span>
+          </div>
+        `;
+      }
+
+      function showToast(msg, isError) {
+        toast.textContent = msg;
+        toast.classList.remove("hidden");
+        toast.classList.toggle("subscription-toast--error", Boolean(isError));
+        toast.classList.toggle("subscription-toast--ok", !isError);
+      }
+
+      function hideToastSoon() {
+        setTimeout(() => {
+          toast.classList.add("hidden");
+          toast.textContent = "";
+        }, 4000);
+      }
+
+      function randomPayMs() {
+        return 10000 + Math.floor(Math.random() * 5001);
+      }
+
+      async function runDummyPay(plan) {
+        const btn = document.querySelector(`.subscription-pay-btn[data-plan="${plan}"]`);
+        const hint = document.querySelector(`[data-plan-hint="${plan}"]`);
+        if (!btn) return;
+
+        const allBtns = document.querySelectorAll(".subscription-pay-btn");
+        allBtns.forEach((b) => {
+          b.disabled = true;
+        });
+
+        btn.textContent = "Processing…";
+        if (hint) {
+          hint.hidden = false;
+          hint.textContent = "Processing payment — please wait.";
+        }
+
+        await new Promise((r) => setTimeout(r, randomPayMs()));
+
+        setSubscriptionAfterPayment(plan);
+        await updateSubscription({ planType: plan, isSubscribed: true });
+
+        btn.textContent = "Pay now";
+        allBtns.forEach((b) => {
+          b.disabled = false;
+        });
+        if (hint) {
+          hint.textContent = "Payment successful.";
+        }
+        showToast("Payment successful. Your subscription is active.", false);
+        hideToastSoon();
+        renderStatus();
+      }
+
+      document.querySelectorAll(".subscription-pay-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const plan = btn.getAttribute("data-plan");
+          if (plan === "monthly" || plan === "yearly") runDummyPay(plan);
+        });
+      });
+
+      renderStatus();
+    </script>
+  </body>
+</html>

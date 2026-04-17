@@ -1,0 +1,63 @@
+from fastapi import FastAPI
+from datetime import datetime
+import random
+from threading import Lock
+
+app = FastAPI()
+
+last_value = 50
+lock = Lock()
+
+def get_base_crowd(hour: int) -> int:
+    if 12 <= hour <= 14:
+        return 80
+    elif 8 <= hour <= 10:
+        return 50
+    elif 16 <= hour <= 18:
+        return 60
+    return 30
+
+def smooth_change(base: int) -> int:
+    global last_value
+
+    with lock:
+        drift = (base - last_value) * 0.1
+        noise = random.randint(-5, 5)
+
+        new_value = last_value + drift + noise
+        new_value = max(0, min(100, int(new_value)))
+
+        last_value = new_value
+        return new_value
+
+def get_level(value: int) -> str:
+    if value < 40:
+        return "LOW"
+    elif value < 70:
+        return "MODERATE"
+    return "HIGH"
+
+def get_suggestion(level: str) -> str:
+    if level == "LOW":
+        return "Go now"
+    elif level == "MODERATE":
+        return "Okay to go"
+    return "Wait 15 min"
+
+@app.get("/api/crowd")
+def get_crowd():
+    now = datetime.now()
+    hour = now.hour
+
+    base = get_base_crowd(hour)
+    crowd_value = smooth_change(base)
+
+    level = get_level(crowd_value)
+    suggestion = get_suggestion(level)
+
+    return {
+        "currentCrowd": crowd_value,
+        "level": level,
+        "suggestion": suggestion,
+        "timestamp": now.isoformat()
+    }

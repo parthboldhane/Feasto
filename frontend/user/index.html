@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in — Feasto</title>
+     <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body>
+    <div class="auth-shell">
+      <div class="auth-card">
+        <div class="auth-brand">
+          <img src="../assets/images/logo.png" alt="" class="auth-brand__logo" />
+          <span class="auth-brand__name">Feasto</span>
+        </div>
+        <h1>Welcome back</h1>
+        <p class="subtitle">Sign in to order, earn rewards, and share feedback.</p>
+        <div id="login-message" role="status"></div>
+        <form id="login-form" autocomplete="on">
+          <div class="field">
+            <label for="username">Username</label>
+            <input class="input" type="text" id="username" name="username" required />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input
+              class="input"
+              type="password"
+              id="password"
+              name="password"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+          <button type="submit" class="btn btn--primary" style="width: 100%; margin-top: 0.5rem">Sign in</button>
+        </form>
+      </div>
+    </div>
+    <script type="module">
+      import { initUserLogin } from "../assets/js/auth.js";
+      initUserLogin("login-form");
+    </script>
+    <script>
+      if (localStorage.getItem("ROLE") !== "user") {
+        window.location.href = "/index.html";
+      }
+    </script>
+  </body>
+</html>

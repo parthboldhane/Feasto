@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home — Feasto</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  </head>
+  <body class="page">
+    <header class="admin-header" role="banner">
+      <a href="dashboard.html" class="admin-header__brand">
+        <img src="../assets/images/logo.png" alt="" class="admin-header__logo" />
+        <span class="admin-header__name">Feasto</span>
+        <span class="admin-header__badge">User</span>
+      </a>
+
+      <nav class="navbar__links" aria-label="User">
+        <a href="dashboard.html" class="is-active">Home</a>
+        <a href="orders.html">Orders</a>
+        <a href="coins.html">Coins</a>
+        <a href="feedback.html">Feedback</a>
+        <a href="#" id="nav-logout" data-action="logout">Logout</a>
+      </nav>
+    </header>
+    <main class="page__main">
+      <h1 class="page__title">Home</h1>
+      <div id="crowd-root" class="grid-dashboard">
+        <div class="card crowd-card">
+          <h2 class="card__title">Crowd Meter</h2>
+          <div class="crowd-meter">
+            <div class="crowd-meter__track">
+              <div
+                id="crowd-meter-fill"
+                class="crowd-meter__fill crowd-meter__fill--moderate"
+                style="width:50%"
+              ></div>
+            </div>
+          </div>
+          <p id="crowd-suggestion" class="text-secondary">Loading crowd data...</p>
+          <div class="card">
+            <h3>Best Time to Visit</h3>
+            <p id="best-time">-</p>
+          </div>
+          <div class="progress-bar">
+            <div id="crowd-progress-fill" class="crowd-meter__fill crowd-meter__fill--moderate" style="width:50%"></div>
+          </div>
+          <p id="crowd-progress-text">-</p>
+        </div>
+      </div>
+      <div class="grid-dashboard" style="margin-top: 1rem">
+        <section class="card">
+          <h2 class="card__title">Today's menu</h2>
+          <p id="dashboard-coin-rule" class="text-secondary" style="margin: 0 0 0.35rem"></p>
+          <p id="dashboard-coin-balance" class="text-secondary" style="margin: 0 0 1rem"></p>
+          <div id="dashboard-menu-root"></div>
+        </section>
+        <section class="card">
+          <h2 class="card__title">Your tray</h2>
+          <div id="dashboard-cart-root">
+            <p style="color: var(--text-secondary); margin: 0">No items in your tray yet.</p>
+          </div>
+          <div class="redeem-controls" style="margin-top: 1rem">
+            <input type="number" id="dashboard-redeem-coins" class="input" placeholder="Enter coins" min="0" />
+            <button id="dashboard-apply-coins" class="btn btn--primary" type="button">Apply</button>
+          </div>
+          <p id="dashboard-discount-display" class="text-secondary" style="margin: 0.75rem 0 0"></p>
+          <div id="dashboard-order-message" role="status" style="margin-top: 1rem"></div>
+          <button type="button" class="btn btn--primary" id="place-order" style="margin-top: 1rem">Place order</button>
+        </section>
+      </div>
+    </main>
+    <script type="module">
+      import { protectRoute } from "../assets/js/route_guard.js";
+      import { initUserDashboard } from "../assets/js/crowd.js";
+      import { initUserDashboardMenu } from "../assets/js/feasto_demo.js";
+
+      if (!protectRoute({ expectedRole: "user" })) {
+        throw new Error("Redirecting");
+      }
+      document.getElementById("nav-logout")?.addEventListener("click", (event) => {
+        event.preventDefault();
+        localStorage.clear();
+        window.location.href = "/index.html";
+      });
+      document.addEventListener("DOMContentLoaded", () => {
+        initUserDashboard();
+        initUserDashboardMenu();
+      });
+    </script>
+  </body>
+</html>
+

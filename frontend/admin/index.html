@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin — Feasto</title>
+     <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body>
+    <div class="auth-shell">
+      <div class="auth-card">
+        <div class="auth-brand">
+          <img src="../assets/images/logo.png" alt="" class="auth-brand__logo" />
+          <span class="auth-brand__name">Feasto</span>
+          <span class="admin-header__badge" style="margin-left: 0.35rem">Admin</span>
+        </div>
+        <h1>Admin sign in</h1>
+        <p class="subtitle">Manage orders, crowd, and feedback.</p>
+        <div id="admin-login-message" role="status"></div>
+        <form id="admin-login-form" autocomplete="on">
+          <div class="field">
+            <label for="username">Username</label>
+            <input class="input" type="text" id="username" name="username" required />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input
+              class="input"
+              type="password"
+              id="password"
+              name="password"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+          <button type="submit" class="btn btn--primary" style="width: 100%; margin-top: 0.5rem">Sign in</button>
+        </form>
+      </div>
+    </div>
+    <script type="module">
+      import { initAdminLogin } from "../assets/js/auth.js";
+      initAdminLogin("admin-login-form");
+    </script>
+    <script>
+      if (localStorage.getItem("ROLE") !== "admin") {
+        window.location.href = "/index.html";
+      }
+    </script>
+  </body>
+</html>

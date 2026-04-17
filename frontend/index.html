@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome — Feasto</title>
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+  </head>
+  <body>
+    <div class="auth-shell">
+      <div class="auth-card">
+        <div class="auth-brand">
+          <img src="/assets/images/logo.png" alt="" class="auth-brand__logo" />
+          <span class="auth-brand__name">Feasto</span>
+        </div>
+        <h1>Welcome to Feasto</h1>
+        <p class="subtitle">Choose how you want to continue.</p>
+        <div style="display: grid; gap: 0.75rem; margin-top: 1.25rem">
+          <button type="button" class="btn btn--primary" id="role-user">Login as User</button>
+          <button type="button" class="btn btn--primary" id="role-admin">Login as Admin</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      const userBtn = document.getElementById("role-user");
+      const adminBtn = document.getElementById("role-admin");
+
+      userBtn?.addEventListener("click", () => {
+        localStorage.setItem("ROLE", "user");
+        window.location.href = "/user/index.html";
+      });
+
+      adminBtn?.addEventListener("click", () => {
+        localStorage.setItem("ROLE", "admin");
+        window.location.href = "/admin/index.html";
+      });
+    </script>
+  </body>
+</html>

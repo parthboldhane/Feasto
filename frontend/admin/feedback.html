@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feedback — Feasto Admin</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  </head>
+  <body class="page">
+    <header class="admin-header" role="banner">
+      <a href="dashboard.html" class="admin-header__brand">
+        <img src="../assets/images/logo.png" alt="" class="admin-header__logo" />
+        <span class="admin-header__name">Feasto</span>
+        <span class="admin-header__badge">Admin</span>
+      </a>
+      <nav class="navbar__links" aria-label="Admin">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="orders.html">Orders</a>
+        <a href="history.html">History</a>
+        <a href="crowd.html">Crowd</a>
+        <a href="feedback.html" class="is-active">Feedback</a>
+        <a href="subscription.html">Subscription</a>
+        <a href="#" id="nav-logout">Logout</a>
+      </nav>
+    </header>
+    <main class="page__main">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap">
+        <h1 class="page__title" style="margin: 0">Feedback</h1>
+        <button type="button" class="btn btn--ghost" id="admin-feedback-refresh">Refresh</button>
+      </div>
+      <div id="admin-feedback-root" style="margin-top: 1rem"></div>
+    </main>
+    <script type="module">
+      import { protectRoute } from "../assets/js/route_guard.js";
+      import { attachLogoutHandler } from "../assets/js/auth.js";
+      import { initAdminFeedbackPage } from "../assets/js/feedback.js";
+      import { initAdminSubscriptionGate } from "../assets/js/admin_subscription_gate.js";
+
+      if (!protectRoute({ expectedRole: "admin" })) {
+        throw new Error("Redirecting");
+      }
+      attachLogoutHandler("admin");
+      initAdminSubscriptionGate();
+      initAdminFeedbackPage();
+    </script>
+  </body>
+</html>

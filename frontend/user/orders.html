@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orders — Feasto</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  </head>
+  <body class="page">
+    <header class="admin-header" role="banner">
+      <a href="dashboard.html" class="admin-header__brand">
+        <img src="../assets/images/logo.png" alt="" class="admin-header__logo" />
+        <span class="admin-header__name">Feasto</span>
+        <span class="admin-header__badge">User</span>
+      </a>
+
+      <nav class="navbar__links" aria-label="User">
+        <a href="dashboard.html">Home</a>
+        <a href="orders.html" class="is-active">Orders</a>
+        <a href="coins.html">Coins</a>
+        <a href="feedback.html">Feedback</a>
+        <a href="#" id="nav-logout" data-action="logout">Logout</a>
+      </nav>
+    </header>
+    <main class="page__main">
+      <h1 class="page__title">Menu &amp; order</h1>
+      <p style="color: var(--text-secondary); margin: -0.5rem 0 1rem; max-width: 42rem">
+        Add items to your tray and place a frontend demo order without backend setup.
+      </p>
+      <div id="menu-root"></div>
+      <div class="card" style="margin-top: 1rem">
+        <h2 class="card__title">Your tray</h2>
+        <div id="cart-root">
+          <p style="color: var(--text-secondary); margin: 0">No items in your tray yet.</p>
+        </div>
+        <div class="redeem-controls" style="margin-top: 1rem">
+          <input type="number" id="redeem-coins" class="input" placeholder="Enter coins" min="0" />
+          <button id="apply-coins" class="btn btn--primary" type="button">Apply</button>
+        </div>
+        <p id="discount-display" class="text-secondary" style="margin: 0.75rem 0 1rem"></p>
+        <fieldset class="order-payment-fieldset">
+          <legend class="card__title" style="margin-bottom: 0.5rem">Payment method</legend>
+          <label class="order-payment-option">
+            <input type="radio" name="order-payment-method" value="cod" checked />
+            Cash on delivery
+          </label>
+          <label class="order-payment-option">
+            <input type="radio" name="order-payment-method" value="upi" />
+            UPI
+          </label>
+        </fieldset>
+        <div id="order-message" role="status"></div>
+        <button type="button" class="btn btn--primary" id="place-order-btn" style="margin-top: 1rem">Place order</button>
+      </div>
+      <div id="order-upi-overlay" class="order-upi-overlay hidden" aria-hidden="true">
+        <div class="order-upi-overlay__box">
+          <span class="spinner" aria-hidden="true"></span>
+          <p>Processing UPI payment…</p>
+        </div>
+      </div>
+    </main>
+    <script type="module">
+      import { protectRoute } from "../assets/js/route_guard.js";
+      import { initOrderDemoPage } from "../assets/js/feasto_demo.js";
+
+      if (!protectRoute({ expectedRole: "user" })) {
+        throw new Error("Redirecting");
+      }
+      document.getElementById("nav-logout")?.addEventListener("click", (event) => {
+        event.preventDefault();
+        localStorage.clear();
+        window.location.href = "/index.html";
+      });
+      initOrderDemoPage();
+    </script>
+  </body>
+</html>
