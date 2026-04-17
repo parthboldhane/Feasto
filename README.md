@@ -1,5 +1,11 @@
 # 🚀 Feasto - Smart Canteen Management System
-
+See for now to LOGIN USE
+FOR ADMIN 
+USERNAME-ADMIN 
+PASSWORD-K@143
+AND FOR USER 
+USERNAME-USER
+AND PASSWORD -K@143
 Feasto is a complete web application designed to optimize the canteen ordering experience. It offers a smart dashboard, wait-time predictions, predefined food ordering, loyalty points, and strong administrative controls.
 
 ## ✨ Features
@@ -8,7 +14,7 @@ Feasto is a complete web application designed to optimize the canteen ordering e
 - **Smart Crowd Dashboard**: View live crowd percentage with color indicators (🟢 Low, 🟡 Moderate, 🔴 High). Get suggestions on the best time to visit and future predictions.
 - **Pre-Order Food**: Browse the menu, select items, and place orders directly from the app.
 - **Payment System**: Flexible options with Cash on Delivery (COD) and a Dummy UPI integration.
-- **Feasto Coins (Loyalty System)**: Earn coins on every order completion (e.g., ₹40 = 200 coins) and redeem them for future discounts (100 coins = ₹1).
+- **Feasto Coins (Loyalty System)**: Earn coins on every order completion (e.g every ₹1 spend will give you 5 Feasto coins and then 100 festo coin can be used as an discount for ₹2)
 - **Unique Order Code**: A secure order verification system combining order IDs with status checks.
 - **Feedback & Ratings**: 1-5 star ratings and comment system available after each order.
 - **Authentication**: Secure role-based access for both users and admins.
